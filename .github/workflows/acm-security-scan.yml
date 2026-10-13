@@ -1,0 +1,29 @@
+name: ACM Security Scan
+
+on:
+  push:
+    branches:
+      - "**"
+
+jobs:
+  acm-security-scan:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout pushed code
+        uses: actions/checkout@v4
+
+      - name: Show commit information
+        run: |
+          echo "Repository: $GITHUB_REPOSITORY"
+          echo "Branch: $GITHUB_REF_NAME"
+          echo "Commit: $GITHUB_SHA"
+
+      - name: Run ACM Scan
+        env:
+          ACM_API_URL: ${{ secrets.ACM_API_URL }}
+          ACM_API_ID: ${{ secrets.ACM_API_ID }}
+          ACM_API_KEY: ${{ secrets.ACM_API_KEY }}
+        run: |
+          chmod +x scripts/run-acm-scan.sh
+          ./scripts/run-acm-scan.sh
